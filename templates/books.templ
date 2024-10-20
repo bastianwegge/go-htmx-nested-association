@@ -1,0 +1,30 @@
+package templates
+
+import (
+	"book-list/data"
+	"fmt"
+)
+
+templ BookList(user *data.User) {
+	@Layout("Book List") {
+		<div id="book-list">
+			<h1>{ user.Name }'s Books</h1>
+			<ul>
+				for _, book := range user.Books {
+					<li>
+						{ book.Title } by { book.Author }
+						<button hx-delete={ "/books/" + fmt.Sprint(book.ID) } hx-target="#book-list" hx-swap="outerHTML">
+							Delete
+						</button>
+					</li>
+				}
+			</ul>
+			<h2>Add a New Book</h2>
+			<form hx-post="/books" hx-target="#book-list" hx-swap="outerHTML">
+				<input type="text" name="title" placeholder="Title" required/>
+				<input type="text" name="author" placeholder="Author" required/>
+				<button type="submit">Add Book</button>
+			</form>
+		</div>
+	}
+}
